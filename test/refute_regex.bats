@@ -89,10 +89,19 @@ ERR_MSG
 @test "refute_regex() <value> <pattern>: returns 1 and displays an error message if <pattern> is not a valid extended regular expression" {
   run refute_regex value '[.*'
 
-  assert_test_fail <<'ERR_MSG'
+  if (( BASH_VERSINFO[0] > 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >=3) )); then
+    assert_test_fail <<'ERR_MSG'
+
+-- ERROR: refute_regex --
+invalid regular expression `[.*': Missing ']'
+--
+ERR_MSG
+  else
+    assert_test_fail <<'ERR_MSG'
 
 -- ERROR: refute_regex --
 Invalid extended regular expression: `[.*'
 --
 ERR_MSG
+  fi
 }

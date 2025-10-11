@@ -329,12 +329,21 @@ ERR_MSG
 @test 'refute_line() --regexp <regexp>: returns 1 and displays an error message if <regexp> is not a valid extended regular expression' {
   run refute_line --regexp '[.*'
 
-  assert_test_fail <<'ERR_MSG'
+  if (( BASH_VERSINFO[0] > 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >=3) )); then
+    assert_test_fail <<'ERR_MSG'
+
+-- ERROR: refute_line --
+invalid regular expression `[.*': Missing ']'
+--
+ERR_MSG
+  else
+    assert_test_fail <<'ERR_MSG'
 
 -- ERROR: refute_line --
 Invalid extended regular expression: `[.*'
 --
 ERR_MSG
+  fi
 }
 
 @test "refute_line(): \`--' stops parsing options" {
