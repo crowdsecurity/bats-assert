@@ -217,7 +217,7 @@ Did you mean to call \`assert_line\` or \`assert_stderr_line\`?" \
   # Arguments.
   local -r expected="$1"
 
-  if (( is_mode_regexp == 1 )) then
+  if (( is_mode_regexp == 1 )); then
     __check_is_valid_regex "$expected" "$caller" || return 1
   fi
 
