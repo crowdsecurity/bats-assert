@@ -337,10 +337,17 @@ ERR_MSG
   run assert_line --regexp '[.*'
 
   if (( BASH_VERSINFO[0] > 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >=3) )); then
-    assert_test_fail <<'ERR_MSG'
+    [[ "$output" =~ "invalid regular expression "([^$'\n']+) ]]
+    cat <<ERR_MSG
 
 -- ERROR: assert_line --
-invalid regular expression `[.*': Missing ']'
+invalid regular expression ${BASH_REMATCH[1]}
+--
+ERR_MSG
+    assert_test_fail <<ERR_MSG
+
+-- ERROR: assert_line --
+invalid regular expression ${BASH_REMATCH[1]}
 --
 ERR_MSG
   else
